@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Mocha Tests</title>
+    <link rel="stylesheet" href="node_modules/mocha/mocha.css">
+</head>
+
+<body>
+    <div id="mocha"></div>
+    <script src="node_modules/mocha/mocha.js"></script>
+    <script src="node_modules/chai/chai.js"></script>
+    <script>mocha.setup('bdd')</script>
+
+    <!-- load code you want to test here -->
+    <script>
+        class Stack {
+            constructor(...items) {
+                this.reverse = false;
+                this.stack = [...items];
+            }
+
+            push(...items) {
+                return this.reverse
+                    ? this.stack.unshift(...items)
+                    : this.stack.push(...items);
+            }
+
+            pop() {
+                return this.reverse ? this.stack.shift() : this.stack.pop();
+            }
+        }
+
+        const { assert } = chai;
+
+
+        describe("Stacks", () => {
+            it("Should push items to top of stack", () => {
+                const stack = new Stack(4, 5);
+                assert.equal(stack.push(1, 2, 3), 5);
+                assert.deepEqual(stack.stack, [4, 5, 1, 2, 3]);
+            });
+
+            it("Should push items to bottom of stack", () => {
+                const stack = new Stack(4, 5);
+                stack.reverse = true;
+                assert.equal(stack.push(1, 2, 3), 5);
+                assert.deepEqual(stack.stack, [1, 2, 3, 4, 5]);
+            });
+
+            it("Should pop item from top of stack", () => {
+                const stack = new Stack(1, 2, 3);
+                assert.equal(stack.pop(), 3);
+            });
+
+            it("Should pop item from bottom of stack", () => {
+                const stack = new Stack(1, 2, 3);
+                stack.reverse = true;
+                assert.equal(stack.pop(), 1);
+            });
+        });
+
+    </script>
+    <!-- load your test files here -->
+
+    <script>
+        mocha.run();
+    </script>
+</body>
+
+</html>
